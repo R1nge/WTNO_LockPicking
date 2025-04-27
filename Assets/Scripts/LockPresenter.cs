@@ -8,8 +8,10 @@ public class LockPresenter : MonoBehaviour
     [SerializeField] private LockModel lockModel;
     [SerializeField] private int angleThreshold = 10;
     private Vector2 _startPosition;
-    private const float StartTimer = 2f;
-    private float _currentTimer = 2f;
+    private const float UnlockStartTimer = 2f;
+    private float _unlockCurrentTimer = 2f;
+    private const float TimeBeforeNewTargetTimer = 1.5f;
+    private float _timeBeforeNewTargetCurrentTimer = 1.5f;
 
     private void Awake()
     {
@@ -56,19 +58,28 @@ public class LockPresenter : MonoBehaviour
         if (Math.Abs(lockModel.CurrentAngle - lockModel.TargetAngle) < angleThreshold)
         {
             lockView.SetHighlight(true);
-            _currentTimer -= Time.deltaTime;
-            if (_currentTimer <= 0)
+            _unlockCurrentTimer -= Time.deltaTime;
+            if (_unlockCurrentTimer <= 0)
             {
-                lockView.SetHighlight(false);
-                lockModel.SetTargetAngle(GetRandomTargetAngle());
+                lockModel.IsLocked = false;
                 Debug.Log("Unlocked");
             }
         }
         else
         {
             lockView.SetHighlight(false);
-            _currentTimer = StartTimer;
+            _unlockCurrentTimer = UnlockStartTimer;
             Debug.Log("Reset timer");
+        }
+
+        if (lockModel.IsLocked)
+        {
+            _timeBeforeNewTargetCurrentTimer -= Time.deltaTime;
+            if (_timeBeforeNewTargetCurrentTimer <= 0)
+            {
+                lockModel.SetTargetAngle(GetRandomTargetAngle());
+                _timeBeforeNewTargetCurrentTimer = TimeBeforeNewTargetTimer;
+            }
         }
     }
 
