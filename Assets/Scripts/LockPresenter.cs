@@ -45,7 +45,7 @@ public class LockPresenter : MonoBehaviour
         {
             var mousePosition = Input.mousePosition;
             var delta = mousePosition - (Vector3)_startPosition;
-            lockModel.SetCurrentAngle((int)delta.x);
+            lockModel.SetCurrentAngle((int)-delta.x);
         }
 
         if (Input.GetMouseButtonUp(0))
