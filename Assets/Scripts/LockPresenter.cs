@@ -55,15 +55,18 @@ public class LockPresenter : MonoBehaviour
 
         if (Math.Abs(lockModel.CurrentAngle - lockModel.TargetAngle) < angleThreshold)
         {
+            lockView.SetHighlight(true);
             _currentTimer -= Time.deltaTime;
             if (_currentTimer <= 0)
             {
+                lockView.SetHighlight(false);
                 lockModel.TargetAngle = Random.Range(0, 360);
                 Debug.Log("Unlocked");
             }
         }
         else
         {
+            lockView.SetHighlight(false);
             _currentTimer = StartTimer;
             Debug.Log("Reset timer");
         }
