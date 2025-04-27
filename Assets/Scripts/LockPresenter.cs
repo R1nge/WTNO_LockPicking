@@ -30,26 +30,31 @@ public class LockPresenter : MonoBehaviour
 
     private void CurrentAngleChanged(int angle) => lockView.SetCurrentAngle(angle);
 
+    private void ProcessInput()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _startPosition = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            var mousePosition = Input.mousePosition;
+            var delta = mousePosition - (Vector3)_startPosition;
+            lockModel.SetCurrentAngle((int)-delta.x);
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _startPosition = Vector2.zero;
+        }
+    }
+
     private void Update()
     {
         if (lockModel.IsLocked)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                _startPosition = Input.mousePosition;
-            }
-
-            if (Input.GetMouseButton(0))
-            {
-                var mousePosition = Input.mousePosition;
-                var delta = mousePosition - (Vector3)_startPosition;
-                lockModel.SetCurrentAngle((int)-delta.x);
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                _startPosition = Vector2.zero;
-            }
+            ProcessInput();
 
             if (Math.Abs(lockModel.CurrentAngle - lockModel.TargetAngle) < angleThreshold)
             {
