@@ -10,7 +10,6 @@ public class LockPresenter : MonoBehaviour
     private Vector2 _startPosition;
     private const float UnlockStartTimer = 2f;
     private float _unlockCurrentTimer = 2f;
-    private const float TimeBeforeNewTargetTimer = 1.5f;
     private float _timeBeforeNewTargetCurrentTimer = 1.5f;
 
     private void Awake()
@@ -78,7 +77,7 @@ public class LockPresenter : MonoBehaviour
             if (_timeBeforeNewTargetCurrentTimer <= 0)
             {
                 lockModel.SetTargetAngle(GetRandomTargetAngle());
-                _timeBeforeNewTargetCurrentTimer = TimeBeforeNewTargetTimer;
+                _timeBeforeNewTargetCurrentTimer = GetRandomTargetAngleSwapTimer();
             }
         }
     }
@@ -91,4 +90,6 @@ public class LockPresenter : MonoBehaviour
     }
 
     private int GetRandomTargetAngle() => Random.Range(-60, 60);
+    
+    private float GetRandomTargetAngleSwapTimer() => Random.Range(0.5f, 1.5f);
 }
