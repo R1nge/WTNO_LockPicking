@@ -79,5 +79,5 @@ public class LockPresenter : MonoBehaviour
         lockModel.OnCurrentAngleChanged -= CurrentAngleChanged;
     }
 
-    private int GetRandomTargetAngle() => Random.Range(-360, 360);
+    private int GetRandomTargetAngle() => Random.Range(-60, 60);
 }
