@@ -44,10 +44,37 @@ public class LockModel
         }
     }
 
+    public void SetTargetAngle(int angle)
+    {
+        var newAngle = angle % 360;
+
+        switch (newAngle)
+        {
+            case > 180:
+                newAngle -= 360;
+                break;
+            case < -180:
+                newAngle += 360;
+                break;
+        }
+
+        TargetAngle = newAngle;
+    }
+
     public void SetCurrentAngle(int angle)
     {
-        angle %= 360;
-        angle = Math.Clamp(angle, 0, 360);
-        CurrentAngle = angle;
+        var newAngle = angle % 360;
+
+        switch (newAngle)
+        {
+            case > 180:
+                newAngle -= 360;
+                break;
+            case < -180:
+                newAngle += 360;
+                break;
+        }
+
+        CurrentAngle = newAngle;
     }
 }
