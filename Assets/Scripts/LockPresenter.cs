@@ -16,7 +16,7 @@ public class LockPresenter : MonoBehaviour
         lockModel.OnLockChanged += OnLockChanged;
         lockModel.OnTargetAngleChanged += TargetAngleChanged;
         lockModel.OnCurrentAngleChanged += CurrentAngleChanged;
-        lockModel.TargetAngle = Random.Range(0, 360);
+        lockModel.TargetAngle = GetRandomTargetAngle();
         lockModel.IsLocked = true;
     }
 
@@ -60,7 +60,7 @@ public class LockPresenter : MonoBehaviour
             if (_currentTimer <= 0)
             {
                 lockView.SetHighlight(false);
-                lockModel.TargetAngle = Random.Range(0, 360);
+                lockModel.TargetAngle = GetRandomTargetAngle();
                 Debug.Log("Unlocked");
             }
         }
@@ -77,5 +77,10 @@ public class LockPresenter : MonoBehaviour
         lockModel.OnLockChanged -= OnLockChanged;
         lockModel.OnTargetAngleChanged -= TargetAngleChanged;
         lockModel.OnCurrentAngleChanged -= CurrentAngleChanged;
+    }
+
+    private int GetRandomTargetAngle()
+    {
+        return Random.Range(0, 60);
     }
 }
