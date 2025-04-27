@@ -13,9 +13,25 @@ public class LockPresenter : MonoBehaviour
 
     private void Awake()
     {
+        lockModel.OnLockChanged += OnLockChanged;
+        lockModel.OnTargetAngleChanged += TargetAngleChanged;
+        lockModel.OnCurrentAngleChanged += CurrentAngleChanged;
         lockModel.TargetAngle = Random.Range(0, 360);
-        lockView.SetTargetAngle(lockModel.TargetAngle);
-        lockView.SetCurrentAngle(lockModel.CurrentAngle);
+        lockModel.IsLocked = true;
+    }
+
+    private void OnLockChanged(bool locked)
+    {
+    }
+
+    private void TargetAngleChanged(int angle)
+    {
+        lockView.SetTargetAngle(angle);
+    }
+
+    private void CurrentAngleChanged(int angle)
+    {
+        lockView.SetCurrentAngle(angle);
     }
 
     private void Update()
@@ -30,7 +46,6 @@ public class LockPresenter : MonoBehaviour
             var mousePosition = Input.mousePosition;
             var delta = mousePosition - (Vector3)_startPosition;
             lockModel.SetCurrentAngle((int)delta.x);
-            lockView.SetCurrentAngle(lockModel.CurrentAngle);
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -44,7 +59,6 @@ public class LockPresenter : MonoBehaviour
             if (_currentTimer <= 0)
             {
                 lockModel.TargetAngle = Random.Range(0, 360);
-                lockView.SetTargetAngle(lockModel.TargetAngle);
                 Debug.Log("Unlocked");
             }
         }
@@ -53,5 +67,12 @@ public class LockPresenter : MonoBehaviour
             _currentTimer = StartTimer;
             Debug.Log("Reset timer");
         }
+    }
+
+    private void OnDestroy()
+    {
+        lockModel.OnLockChanged -= OnLockChanged;
+        lockModel.OnTargetAngleChanged -= TargetAngleChanged;
+        lockModel.OnCurrentAngleChanged -= CurrentAngleChanged;
     }
 }

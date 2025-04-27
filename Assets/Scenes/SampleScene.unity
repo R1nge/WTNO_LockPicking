@@ -613,9 +613,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockView: {fileID: 273726848}
   lockModel:
-    <IsLocked>k__BackingField: 1
-    <TargetAngle>k__BackingField: 0
-    <CurrentAngle>k__BackingField: 0
+    isLocked: 1
+    targetAngle: 0
+    currentAngle: 0
+  angleThreshold: 10
 --- !u!4 &1432188284
 Transform:
   m_ObjectHideFlags: 0
