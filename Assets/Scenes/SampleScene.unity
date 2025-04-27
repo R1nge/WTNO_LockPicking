@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9a1cc88a1de48f291d0a9dee53a4c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 2032087527469328270}
+  target: {fileID: 8264372246332814272}
   current: {fileID: 2128531541404741486}
   highlight: {fileID: 182492213}
 --- !u!4 &273726849
@@ -1132,6 +1132,7 @@ GameObject:
   - component: {fileID: 2032087527469328270}
   - component: {fileID: 752581416389363194}
   - component: {fileID: 2592458092766104416}
+  - component: {fileID: 8264372246332814272}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -1139,6 +1140,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8264372246332814272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8264372246332814271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9312b3aae1dc40838b851b216774c69e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressMaterial: {fileID: 2100000, guid: 1a1dd5b50c775164dac40a8a0493ee83, type: 2}
+  progressMeshes:
+  - {fileID: 7802749079473304449}
+  - {fileID: 6156313818932031540}
+  - {fileID: 6236040483667030702}
 --- !u!33 &8633430240878731171
 MeshFilter:
   m_ObjectHideFlags: 0

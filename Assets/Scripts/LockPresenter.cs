@@ -11,6 +11,7 @@ public class LockPresenter : MonoBehaviour
     private const float UnlockStartTimer = 2f;
     private float _unlockCurrentTimer = 2f;
     private float _timeBeforeNewTargetCurrentTimer = 1.5f;
+    private float _progressTimerCurrent = 1f;
 
     private void Awake()
     {
@@ -25,15 +26,9 @@ public class LockPresenter : MonoBehaviour
     {
     }
 
-    private void TargetAngleChanged(int angle)
-    {
-        lockView.SetTargetAngle(angle);
-    }
+    private void TargetAngleChanged(int angle) => lockView.SetTargetAngle(angle);
 
-    private void CurrentAngleChanged(int angle)
-    {
-        lockView.SetCurrentAngle(angle);
-    }
+    private void CurrentAngleChanged(int angle) => lockView.SetCurrentAngle(angle);
 
     private void Update()
     {
@@ -57,6 +52,14 @@ public class LockPresenter : MonoBehaviour
         if (Math.Abs(lockModel.CurrentAngle - lockModel.TargetAngle) < angleThreshold)
         {
             lockView.SetHighlight(true);
+
+            _progressTimerCurrent -= Time.deltaTime;
+            if (_progressTimerCurrent <= 0)
+            {
+                lockView.AddProgress();
+                PickNewProgressTimer();
+            }
+
             _unlockCurrentTimer -= Time.deltaTime;
             if (_unlockCurrentTimer <= 0)
             {
@@ -68,6 +71,8 @@ public class LockPresenter : MonoBehaviour
         {
             lockView.SetHighlight(false);
             _unlockCurrentTimer = UnlockStartTimer;
+            lockView.ResetProgress();
+            PickNewProgressTimer();
             Debug.Log("Reset timer");
         }
 
@@ -78,6 +83,7 @@ public class LockPresenter : MonoBehaviour
             {
                 lockModel.SetTargetAngle(GetRandomTargetAngle());
                 _timeBeforeNewTargetCurrentTimer = GetRandomTargetAngleSwapTimer();
+                PickNewProgressTimer();
             }
         }
     }
@@ -90,6 +96,8 @@ public class LockPresenter : MonoBehaviour
     }
 
     private int GetRandomTargetAngle() => Random.Range(-60, 60);
-    
+
     private float GetRandomTargetAngleSwapTimer() => Random.Range(0.5f, 1.5f);
+
+    private void PickNewProgressTimer() => _progressTimerCurrent = UnlockStartTimer / 3f;
 }
