@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -86,11 +87,28 @@ public class LockPresenter : MonoBehaviour
             _timeBeforeNewTargetTimerCurrent -= Time.deltaTime;
             if (_timeBeforeNewTargetTimerCurrent <= 0)
             {
-                lockModel.SetTargetAngle(GetRandomTargetAngle());
                 _timeBeforeNewTargetTimerCurrent = GetRandomTargetAngleSwapTimer();
                 PickNewProgressTimer();
+                StartCoroutine(LerpTargetAngle());
             }
         }
+    }
+
+    private IEnumerator LerpTargetAngle()
+    {
+        var time = 0f;
+        var currentAngle = lockModel.TargetAngle;
+        var targetAngle = GetRandomTargetAngle();
+
+        while (time < _timeBeforeNewTargetTimerCurrent)
+        {
+            var t = time / _timeBeforeNewTargetTimerCurrent;
+            lockModel.SetTargetAngle((int)Mathf.Lerp(currentAngle, targetAngle, t));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        
+        lockModel.SetTargetAngle(targetAngle);
     }
 
     private void OnDestroy()
