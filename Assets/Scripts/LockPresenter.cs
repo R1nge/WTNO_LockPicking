@@ -6,11 +6,10 @@ public class LockPresenter : MonoBehaviour
 {
     [SerializeField] private LockView lockView;
     [SerializeField] private LockModel lockModel;
-    [SerializeField] private int angleThreshold = 10;
+    [SerializeField] private LockConfig lockConfig;
     private Vector2 _startPosition;
-    private const float UnlockStartTimer = 2f;
-    private float _unlockCurrentTimer = 2f;
-    private float _timeBeforeNewTargetCurrentTimer = 1.5f;
+    private float _unlockTimerCurrent = 2f;
+    private float _timeBeforeNewTargetTimerCurrent = 1.5f;
     private float _progressTimerCurrent = 1f;
 
     private void Awake()
@@ -56,7 +55,7 @@ public class LockPresenter : MonoBehaviour
         {
             ProcessInput();
 
-            if (Math.Abs(lockModel.CurrentAngle - lockModel.TargetAngle) < angleThreshold)
+            if (Math.Abs(lockModel.CurrentAngle - lockModel.TargetAngle) < lockConfig.AngleThreshold)
             {
                 lockView.SetHighlight(true);
 
@@ -67,8 +66,8 @@ public class LockPresenter : MonoBehaviour
                     PickNewProgressTimer();
                 }
 
-                _unlockCurrentTimer -= Time.deltaTime;
-                if (_unlockCurrentTimer <= 0)
+                _unlockTimerCurrent -= Time.deltaTime;
+                if (_unlockTimerCurrent <= 0)
                 {
                     lockView.AddProgress();
                     lockModel.IsLocked = false;
@@ -78,17 +77,17 @@ public class LockPresenter : MonoBehaviour
             else
             {
                 lockView.SetHighlight(false);
-                _unlockCurrentTimer = UnlockStartTimer;
+                _unlockTimerCurrent = lockConfig.UnlockStartTimer;
                 lockView.ResetProgress();
                 PickNewProgressTimer();
                 Debug.Log("Reset timer");
             }
 
-            _timeBeforeNewTargetCurrentTimer -= Time.deltaTime;
-            if (_timeBeforeNewTargetCurrentTimer <= 0)
+            _timeBeforeNewTargetTimerCurrent -= Time.deltaTime;
+            if (_timeBeforeNewTargetTimerCurrent <= 0)
             {
                 lockModel.SetTargetAngle(GetRandomTargetAngle());
-                _timeBeforeNewTargetCurrentTimer = GetRandomTargetAngleSwapTimer();
+                _timeBeforeNewTargetTimerCurrent = GetRandomTargetAngleSwapTimer();
                 PickNewProgressTimer();
             }
         }
@@ -105,5 +104,5 @@ public class LockPresenter : MonoBehaviour
 
     private float GetRandomTargetAngleSwapTimer() => Random.Range(0.5f, 1.5f);
 
-    private void PickNewProgressTimer() => _progressTimerCurrent = UnlockStartTimer / 3f;
+    private void PickNewProgressTimer() => _progressTimerCurrent = lockConfig.UnlockStartTimer / lockView.ProgressMeshesCount;
 }

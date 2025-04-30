@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+//TODO: add lerp angle and compare with it, also use it to update the view
+
 [Serializable]
 public class LockModel
 {

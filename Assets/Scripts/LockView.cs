@@ -5,6 +5,8 @@ public class LockView : MonoBehaviour
     [SerializeField] private TargetView target;
     [SerializeField] private Transform current;
     [SerializeField] private GameObject highlight;
+    
+    public int ProgressMeshesCount => target.ProgressMeshes.Length;
 
     public void SetTargetAngle(float angle)
     {

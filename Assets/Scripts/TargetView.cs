@@ -5,6 +5,7 @@ public class TargetView : MonoBehaviour
     [SerializeField] private Material progressMaterial;
     private Material _defaultMaterial;
     [SerializeField] private MeshRenderer[] progressMeshes;
+    public MeshRenderer[] ProgressMeshes => progressMeshes;
     private int _progress = 0;
 
     private void Awake()
