@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b6f512ef4349e2ac3bdc2645caa69a, type: 3}
   m_Name: Lock Config
   m_EditorClassIdentifier: 
-  angleThreshold: 10
+  angleThreshold: 5
   unlockStartTimer: 2
+  offTargetTimer: 1

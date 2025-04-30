@@ -15,7 +15,7 @@ public class TargetView : MonoBehaviour
 
     public void AddProgress()
     {
-        if (_progress >= progressMeshes.Length) return;
+        if (_progress > progressMeshes.Length) return;
         _progress++;
         UpdateProgress();
     }

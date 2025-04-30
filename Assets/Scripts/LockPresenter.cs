@@ -8,10 +8,12 @@ public class LockPresenter : MonoBehaviour
     [SerializeField] private LockView lockView;
     [SerializeField] private LockModel lockModel;
     [SerializeField] private LockConfig lockConfig;
+    private Coroutine _lerpCoroutine;
     private Vector2 _startPosition;
     private float _unlockTimerCurrent = 2f;
     private float _timeBeforeNewTargetTimerCurrent = 1.5f;
     private float _progressTimerCurrent = 1f;
+    private float _offTargetTimerCurrent = 1f;
 
     private void Awake()
     {
@@ -58,13 +60,14 @@ public class LockPresenter : MonoBehaviour
 
             if (Math.Abs(lockModel.CurrentAngle - lockModel.TargetAngle) < lockConfig.AngleThreshold)
             {
+                _offTargetTimerCurrent = lockConfig.OffTargetTimer;
                 lockView.SetHighlight(true);
 
                 _progressTimerCurrent -= Time.deltaTime;
                 if (_progressTimerCurrent <= 0)
                 {
                     lockView.AddProgress();
-                    PickNewProgressTimer();
+                    ResetProgressTimer();
                 }
 
                 _unlockTimerCurrent -= Time.deltaTime;
@@ -72,24 +75,34 @@ public class LockPresenter : MonoBehaviour
                 {
                     lockView.AddProgress();
                     lockModel.IsLocked = false;
+
+                    if (_lerpCoroutine != null)
+                    {
+                        StopCoroutine(_lerpCoroutine);
+                    }
+
                     Debug.Log("Unlocked");
                 }
             }
             else
             {
-                lockView.SetHighlight(false);
-                _unlockTimerCurrent = lockConfig.UnlockStartTimer;
-                lockView.ResetProgress();
-                PickNewProgressTimer();
-                Debug.Log("Reset timer");
+                if (_offTargetTimerCurrent <= 0)
+                {
+                    lockView.SetHighlight(false);
+                    _unlockTimerCurrent = lockConfig.UnlockStartTimer;
+                    _offTargetTimerCurrent = lockConfig.OffTargetTimer;
+                    ResetProgressTimer();
+                    lockView.ResetProgress();
+                    Debug.Log("Reset timer");
+                }
             }
 
+            _offTargetTimerCurrent -= Time.deltaTime;
             _timeBeforeNewTargetTimerCurrent -= Time.deltaTime;
             if (_timeBeforeNewTargetTimerCurrent <= 0)
             {
                 _timeBeforeNewTargetTimerCurrent = GetRandomTargetAngleSwapTimer();
-                PickNewProgressTimer();
-                StartCoroutine(LerpTargetAngle());
+                _lerpCoroutine = StartCoroutine(LerpTargetAngle());
             }
         }
     }
@@ -107,7 +120,7 @@ public class LockPresenter : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
-        
+
         lockModel.SetTargetAngle(targetAngle);
     }
 
@@ -122,5 +135,5 @@ public class LockPresenter : MonoBehaviour
 
     private float GetRandomTargetAngleSwapTimer() => Random.Range(0.5f, 1.5f);
 
-    private void PickNewProgressTimer() => _progressTimerCurrent = lockConfig.UnlockStartTimer / lockView.ProgressMeshesCount;
+    private void ResetProgressTimer() => _progressTimerCurrent = lockConfig.UnlockStartTimer / lockView.ProgressMeshesCount;
 }
